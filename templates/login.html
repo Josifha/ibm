@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<br><br>
+<div style="height: 70vh;" class="d-flex justify-content-center align-items-center">
+    <form method="POST" action="" class="bg-white w-50 border rounded p-5 shadow">
+        <h1>Login</h1>
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" name="username" class="form-control" value={{request.form.username}}>
+        </div>
+        <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" class="form-control" value={{request.form.password}}>
+            </div>
+        <p><button type="submit" class="btn btn-primary" value="Submit">Submit</button></p>
+    </form>
+</div>
+{% endblock %}
