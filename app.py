@@ -11,8 +11,7 @@ app = Flask(__name__)
 
 app.secret_key='a'
 
-conn = ibm_db.connect("DATABASE=bludb;HOSTNAME=b70af05b-76e4-4bca-a1f5-23dbb4c6a74e.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud;PORT=32716;SECURITY=SSL;SSLServerCertificate=DigiCertGlobalRootCA.crt;UID=bby87799;PWD=qH0Sow9mBYmGdGRB",'','')
-
+conn = ibm_db.connect("DATABASE=bludb;HOSTNAME=815fa4db-dc03-4c70-869a-a9cc13f33084.bs2io90l08kqb1od8lcg.databases.appdomain.cloud;PORT=30367;SECURITY=SSL;SSLServerCertificate=DigiCertGlobalRootCA.crt;UID=znd71133;PWD=SNOsh2PpbXd6Ew8V",'','')
 #Products
 @app.route('/products')
 def products():
@@ -90,7 +89,8 @@ class RegisterForm(Form):
     confirm = PasswordField('Confirm Password')
 
 #user register
-@app.route('/register', methods=['GET','POST'])
+
+@app.route('/register', methods = ['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -98,7 +98,7 @@ def register():
         email = form.email.data
         username = form.username.data
         password = form.password.data
-
+        print (name,email,username,password)
         sql1="INSERT INTO USERS(name, email, username, password) VALUES(?,?,?,?)"
         stmt1 = ibm_db.prepare(conn, sql1)
         ibm_db.bind_param(stmt1,1,name)
@@ -133,7 +133,7 @@ def login():
             session['username'] = username
 
             flash("you are now logged in","success")
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('products'))
         else:
             error = 'Invalid Login'
             return render_template('login.html', error=error)
@@ -267,7 +267,7 @@ def edit_product(id):
     return render_template('edit_product.html', form=form)
 
 #Delete Product
-@app.route('/delete_product/<string:id>', methods=['POST'])
+@app.route('/delete_product/<string:id>', methods=['POST','GET'])
 @is_logged_in
 def delete_product(id):
 
@@ -336,7 +336,7 @@ def edit_location(id):
     return render_template('edit_location.html', form=form)
 
 #Delete Location
-@app.route('/delete_location/<string:id>', methods=['POST'])
+@app.route('/delete_location/<string:id>', methods=['POST','GET'])
 @is_logged_in
 def delete_location(id):
     sql2="DELETE FROM locations WHERE location_id=?"
@@ -605,7 +605,7 @@ def add_product_movements():
     return render_template('add_product_movements.html', form=form)
 
 #Delete Product Movements
-@app.route('/delete_product_movements/<string:id>', methods=['POST'])
+@app.route('/delete_product_movements/<string:id>', methods=['POST','GET'])
 @is_logged_in
 def delete_product_movements(id):
 
@@ -621,4 +621,4 @@ def delete_product_movements(id):
 if __name__ == '__main__':
     app.secret_key = "secret123"
     #when the debug mode is on, we do not need to restart the server again and again
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
